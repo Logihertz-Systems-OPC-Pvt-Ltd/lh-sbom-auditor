@@ -5,14 +5,26 @@ build-backend = "hatchling.build"
 [project]
 name = "lh-sbom-auditor"
 version = "0.1.0"
-description = "Supply-chain security CLI that parses package lockfiles, generates CycloneDX 1.5 JSON SBOMs, and audits dependencies."
+description = "Validates CycloneDX (v1.4–v1.6) and SPDX (v2.3) Software Bills of Materials for NTIA minimum elements, cryptographic component hashes, copyleft/restrictive license violations (GPL/AGPL), PURL syntax, and orphan dependencies."
 readme = "README.md"
 requires-python = ">=3.11"
-license = "MIT"
+license = "Apache-2.0"
 authors = [
-    { name = "Logihertz Systems OPC Pvt Ltd", email = "security@logihertz.com" },
+    { name = "logihertzsystems", email = "ops@logihertz.com" },
+    { name = "Sameer Tawade (Creator, Founder, Director & Sole Developer)", email = "ops@logihertz.com" },
 ]
-keywords = ["sbom", "cyclonedx", "security", "supply-chain", "audit", "lockfile"]
+maintainers = [
+    { name = "Logihertz Systems (OPC) Private Limited", email = "ops@logihertz.com" },
+]
+keywords = [
+    "sbom",
+    "cyclonedx",
+    "spdx",
+    "ntia-compliance",
+    "license-compliance",
+    "supply-chain-security",
+    "logihertz",
+]
 classifiers = [
     "Development Status :: 4 - Beta",
     "Environment :: Console",
@@ -39,6 +51,13 @@ dev = [
     "ruff>=0.4.0",
     "bandit>=1.7.5",
 ]
+
+
+[project.urls]
+Homepage = "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-sbom-auditor"
+Repository = "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-sbom-auditor"
+Documentation = "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-sbom-auditor#documentation"
+Issues = "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-sbom-auditor/issues"
 
 [project.scripts]
 lh-sbom = "lh_sbom_auditor.cli:app"

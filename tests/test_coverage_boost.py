@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-sbom-auditor (lh-sbom)
+# Module:        tests.test_coverage_boost
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Additional unit tests boosting coverage across edge cases and CLI flows."""
 
 from __future__ import annotations

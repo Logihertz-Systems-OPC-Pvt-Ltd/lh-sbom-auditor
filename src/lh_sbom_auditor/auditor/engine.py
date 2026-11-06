@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-sbom-auditor (lh-sbom)
+# Module:        src.lh_sbom_auditor.auditor.engine
+# Role:          Core Security Engine Component
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Engine orchestrating dependency graph audits against configured rules."""
 
 from __future__ import annotations
@@ -49,4 +59,3 @@ class AuditEngine:
             findings=findings,
             policy_applied=self.policy.to_dict(),
         )
-

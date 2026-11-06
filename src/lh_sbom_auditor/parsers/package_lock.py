@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-sbom-auditor (lh-sbom)
+# Module:        src.lh_sbom_auditor.parsers.package_lock
+# Role:          Core Security Engine Component
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Parser for Node.js package-lock.json files."""
 
 from __future__ import annotations

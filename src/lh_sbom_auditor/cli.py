@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-sbom-auditor (lh-sbom)
+# Module:        src.lh_sbom_auditor.cli
+# Role:          CLI Interface & Execution Controller
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Command-line interface (CLI) for lh-sbom-auditor."""
 
 from __future__ import annotations
@@ -17,6 +27,11 @@ from lh_sbom_auditor.exporters.sarif import export_audit_sarif, export_graph_sar
 from lh_sbom_auditor.exporters.table import render_audit_table
 from lh_sbom_auditor.parsers.base import detect_and_parse
 from lh_sbom_auditor.sbom.cyclonedx import CycloneDXGenerator
+
+# --- Exit Code Semantics ---
+# Exit Code 0: Audit passed successfully with zero policy violations.
+# Exit Code 1: Security findings detected meeting or exceeding failure threshold (--fail-on).
+# Exit Code 2: Command execution error, invalid arguments, or unparseable input target.
 
 app = typer.Typer(
     name="lh-sbom",

@@ -1,11 +1,20 @@
 # Security Policy
 
+## Overview
+
+`lh-sbom-auditor` is an open-source security tool developed by **Logihertz Systems (OPC) Private Limited**.
+Because security tools must maintain the highest standards of safety and integrity, `lh-sbom-auditor`
+is engineered with a zero-daemon, clean-room design that operates entirely offline. It does not
+transmit telemetry, execute external network calls, or require persistent background daemons.
+
+---
+
 ## Supported Versions
 
-Logihertz Systems actively maintains and releases security patches for the following versions of `lh-sbom-auditor`:
+Only the latest active minor release of `lh-sbom-auditor` receives security updates and bug fixes.
 
 | Version | Supported          |
-| ------- | ------------------ |
+|:-------:|:------------------:|
 | 0.1.x   | :white_check_mark: |
 | < 0.1.0 | :x:                |
 
@@ -13,33 +22,30 @@ Logihertz Systems actively maintains and releases security patches for the follo
 
 ## Reporting a Vulnerability
 
-The Logihertz Systems engineering team takes supply chain and software security seriously. If you discover a security vulnerability within `lh-sbom-auditor`, please report it responsibly rather than opening a public GitHub issue.
+If you discover a security vulnerability, parser flaw, or denial-of-service issue in `lh-sbom-auditor`,
+please report it responsibly through our security response channel.
+**Do not create a public GitHub issue for security vulnerabilities.**
 
-### Reporting Procedure
+### Vulnerability Reporting Process
 
-1. **Email Contact**: Send an email describing the vulnerability to **`security@logihertz.com`**.
-2. **Details to Include**:
-   - Component / module affected (e.g. `parsers`, `auditor`, `sbom`, `cli`).
-   - Description of the potential impact and attack vector.
-   - Minimal reproducible proof-of-concept (PoC) manifest or command.
-   - Proposed remediation or patch if available.
+1. **Email Details**: Send an advisory email to:
+   **ops@logihertz.com**
+2. **Include Key Information**:
+   - Component / module name affected
+   - Specific version of `lh-sbom-auditor`
+   - Clear description of the vulnerability and potential security impact
+   - Minimal reproduction snippet, proof-of-concept payload, or configuration manifest
 3. **Response Timeline**:
-   - **Acknowledgment**: Within 24-48 business hours.
-   - **Triage & Assessment**: Within 5 business days.
-   - **Patch Release & Advisory**: Within 14-30 business days depending on severity.
-
-### Safe Harbor
-
-Logihertz Systems will not pursue civil or criminal action against security researchers who:
-- Perform vulnerability research without compromising user data or disrupting systems.
-- Give us reasonable time to remediate the vulnerability before public disclosure.
-- Act in good faith and avoid privacy violations or destruction of data.
+   - **Acknowledgment**: Within **48 hours** of receiving your report.
+   - **Triage & Status**: Within **3 business days** with preliminary assessment and reproduction verification.
+   - **Remediation & Patch**: We aim to release a verified patch within **5 business days** for high or critical severity issues.
 
 ---
 
-## Supply Chain Integrity Commitments
+## Security Engineering Standards
 
-- **Clean-Room Implementation**: All parsers, risk evaluators, and exporters are clean-room implementations with zero copied third-party code.
-- **Dependency Hygiene**: Runtime dependencies are kept to a strictly verified minimal set (`typer`, `rich`).
-- **Static Analysis & SAST**: All code changes undergo mandatory static analysis with `ruff`, AST security scanning with `bandit`, and 100% test verification.
-
+`lh-sbom-auditor` enforces rigorous internal engineering controls:
+- **100% Offline Static Analysis**: All inspection and parsing occurs locally in memory without remote calls.
+- **Automated SAST**: Automated static analysis security testing via Bandit on every commit and pull request.
+- **Linting & Code Quality**: Strict formatting and linting via Ruff with a 100-character line length limit.
+- **Strict Typing**: Type annotations enforced across all source modules with `from __future__ import annotations`.

@@ -1,221 +1,130 @@
 # lh-sbom-auditor
 
-[![CI](https://github.com/logihertz/lh-sbom-auditor/actions/workflows/ci.yml/badge.svg)](https://github.com/logihertz/lh-sbom-auditor/actions/workflows/ci.yml)
-[![Python Version](https://img.shields.io/badge/python-3.11%20%7C%203.12%20%7C%203.13-blue.svg)](https://www.python.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![CycloneDX](https://img.shields.io/badge/CycloneDX-v1.5-brightgreen)](https://cyclonedx.org/)
-[![SARIF](https://img.shields.io/badge/SARIF-v2.1.0-orange)](https://docs.oasis-open.org/sarif/sarif/v2.1.0/sarif-v2.1.0.html)
+[![CI](https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-sbom-auditor/actions/workflows/ci.yml/badge.svg)](https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-sbom-auditor/actions/workflows/ci.yml)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
+[![Code style: ruff](https://img.shields.io/badge/code%20style-ruff-000000.svg)](https://github.com/astral-sh/ruff)
+[![Security: bandit](https://img.shields.io/badge/security-bandit-yellow.svg)](https://github.com/PyCQA/bandit)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache--2.0-blue.svg)](LICENSE)
 
-A clean-room supply chain security CLI by **Logihertz Systems OPC Pvt Ltd** that parses package lockfiles, generates standard **CycloneDX 1.5 JSON Software Bills of Materials (SBOMs)**, and audits dependencies against known supply-chain risk rules (unpinned versions, restrictive/copyleft licenses, and typosquatting vectors).
+An enterprise cyclonedx & spdx sbom compliance auditor developed by **Logihertz Systems (OPC) Private Limited**.
+
+Validates CycloneDX (v1.4–v1.6) and SPDX (v2.3) Software Bills of Materials for NTIA minimum elements, cryptographic component hashes, copyleft/restrictive license violations (GPL/AGPL), PURL syntax, and orphan dependencies.
 
 ---
 
-## Features
+## Key Features
 
-- **Multi-Ecosystem Lockfile Parsing**:
-  - Python `uv.lock` (TOML format with virtual workspace roots, sdist/wheel SHA-256 hashes)
-  - Python `requirements.txt` (PEP 508 specifiers, hashes, editable flags, and line continuations)
-  - Node.js `package-lock.json` (npm v1, v2, and v3 lockfile formats, scoped packages, integrity hashes)
-- **CycloneDX 1.5 JSON SBOM Generation**:
-  - Full compliance with the official CycloneDX v1.5 JSON specification
-  - Complete component hierarchy with package URLs (`purl`), checksums, licenses, direct/transitive scopes, and dependency graph relationships
-- **Automated Supply-Chain Risk Auditor**:
-  - **Unpinned Dependencies (`LH-RULE-001`)**: Identifies packages without strict pinning (`==`) or using floating/range specifiers (`*`, `latest`, `>=`, `~=`)
-  - **License Compliance (`LH-RULE-002`, `LH-RULE-003`)**: Flags forbidden copyleft licenses (GPL, AGPL, SSPL) or undeclared/unknown licenses based on customizable policy
-  - **Typosquatting Risk Vectors (`LH-RULE-004`)**: Detects impersonation attacks against popular open-source packages using:
-    - Damerau-Levenshtein edit distance & character transposition
-    - Separator confusion (`-` vs `_` mismatch)
-    - Visual homoglyphs / confusables (`0`/`o`, `1`/`l`, `rn`/`m`, `vv`/`w`)
-    - Affix wrapper impersonation (`pkg-python`, `node-pkg`, `official-pkg`)
-- **Flexible Exporters**:
-  - **Rich Terminal Tables**: Interactive, colored console tables with severity metrics
-  - **Structured JSON**: Machine-readable scan results and normalized graph schemas
-  - **OASIS SARIF v2.1.0**: Native integration with GitHub Advanced Security code scanning, GitLab SAST, and CI/CD pipelines
-- **Clean-Room Engineering**:
-  - Zero copied third-party code
-  - Strict Python 3.11+ type annotations
-  - Comprehensive docstrings across all modules
+- **CycloneDX v1.5 JSON Generation**: Parses manifests and generates compliant CycloneDX Software Bill of Materials documents.
+- **Supply-Chain Risk Auditing**: Evaluates dependency trees against security policies (unpinned versions, restrictive/copyleft licenses).
+- **Typosquatting Detection**: Employs Levenshtein distance algorithms to detect malicious packages mimicking popular open-source libraries.
+- **Cryptographic Hash Verification**: Validates package checksums (SHA-256) to ensure integrity across builds.
+- **Multi-Format Reporting**: Outputs rich terminal tables, machine-readable JSON, and OASIS SARIF v2.1.0.
+
+---
+
+## Core Detection Rules
+
+| Rule ID | Severity | Description |
+|:---|:---:|:---|
+| `LH-RULE-001` | `HIGH` | Unpinned package version or floating wildcard constraint in dependency manifest |
+| `LH-RULE-002` | `HIGH` | Non-compliant or prohibited open-source license detected in dependency tree |
+| `LH-RULE-003` | `CRITICAL` | Missing cryptographic package integrity hash in CycloneDX SBOM |
+| `LH-RULE-004` | `CRITICAL` | Package name typosquatting vector matching popular registry library |
+| `LH-RULE-005` | `HIGH` | Known vulnerable package version identified in software bill of materials |
+| `LH-RULE-006` | `MEDIUM` | Deprecated or unmaintained package dependency declared in manifest |
+| `LH-RULE-007` | `HIGH` | Circular or deep unpruned dependency graph topology detected |
+| `LH-RULE-008` | `MEDIUM` | Inconsistent license declaration across transitive dependency tree |
+| `LH-RULE-009` | `LOW` | Missing supplier or package origin metadata in SBOM inventory |
+| `LH-RULE-010` | `LOW` | CycloneDX 1.5 JSON schema validation warning or missing metadata |
 
 ---
 
 ## Installation
 
-Install dependencies using [`uv`](https://astral.sh/uv):
+### Using `uv` (Recommended)
 
 ```bash
 # Clone the repository
-git clone https://github.com/logihertz/lh-sbom-auditor.git
+git clone https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-sbom-auditor.git
 cd lh-sbom-auditor
 
-# Create a virtual environment and install with dev dependencies
+# Create virtual environment and install in editable mode with development tools
 uv venv
 source .venv/bin/activate
 uv pip install -e ".[dev]"
 ```
 
-Or install the package directly:
+### Using standard `pip`
 
 ```bash
-uv pip install .
+pip install -e .
 ```
 
-Verify installation:
+---
+
+## CLI Usage
+
+The primary executable entrypoint is `lh-sbom` (also accessible via `lh-sbom`).
 
 ```bash
-lh-sbom --version
+# Generate a CycloneDX 1.5 JSON SBOM from repository dependencies
+lh-sbom generate . --format cyclonedx --output sbom.json
+
+# Audit dependencies against a custom security policy file
+lh-sbom audit . --policy policy.yaml
+
+# Export findings to OASIS SARIF v2.1.0
+lh-sbom audit . --format sarif --output sbom-audit.sarif
+
+# Filter by minimum severity threshold
+lh-sbom audit . --min-severity HIGH
 ```
 
 ---
 
-## Usage
+## Exit Codes
 
-The CLI entry point is `lh-sbom`. It provides two primary subcommands: `generate` and `audit`.
-
-### 1. Generate SBOM (`lh-sbom generate`)
-
-Generate CycloneDX 1.5 JSON SBOMs or inventory representations from lockfiles or directories.
-
-```bash
-# Generate CycloneDX 1.5 JSON SBOM to stdout
-lh-sbom generate ./uv.lock
-
-# Generate CycloneDX SBOM and save to file
-lh-sbom generate ./uv.lock --format cyclonedx --output sbom.json
-
-# Generate normalized graph JSON
-lh-sbom generate ./package-lock.json --format json --output graph.json
-
-# Generate OASIS SARIF v2.1.0 inventory report
-lh-sbom generate ./requirements.txt --format sarif --output inventory.sarif
-```
-
-#### CLI Options for `generate`:
-- `path` (argument): Path to lockfile (`uv.lock`, `requirements.txt`, `package-lock.json`) or a directory containing a lockfile.
-- `--format`, `-f`: Output format (`cyclonedx` [default], `json`, `sarif`).
-- `--output`, `-o`: Output destination file. If omitted, writes directly to stdout.
+| Exit Code | Meaning |
+|:---:|:---|
+| `0` | All audits and security checks passed; no policy violations detected. |
+| `1` | One or more security findings, policy violations, or compliance failures detected. |
+| `2` | Execution error (invalid arguments, missing input files, malformed syntax). |
 
 ---
 
-### 2. Audit Dependencies (`lh-sbom audit`)
+## Documentation
 
-Audit dependencies against supply chain risk rules with customizable organizational policies.
+Comprehensive enterprise documentation is available in the [`docs/`](docs/) directory and repository root:
 
-```bash
-# Audit with terminal Rich table
-lh-sbom audit ./requirements.txt
-
-# Audit with custom security policy file
-lh-sbom audit ./uv.lock --policy policy.yaml
-
-# Export findings as structured JSON
-lh-sbom audit ./package-lock.json --format json --output audit_report.json
-
-# Export findings as OASIS SARIF v2.1.0 for GitHub Code Scanning
-lh-sbom audit ./requirements.txt --format sarif --output results.sarif
-```
-
-#### CLI Options for `audit`:
-- `path` (argument): Path to lockfile (`uv.lock`, `requirements.txt`, `package-lock.json`) or directory.
-- `--policy`, `-p`: Path to custom policy file (`policy.yaml` or `policy.json`). If omitted, uses recommended default policy.
-- `--format`, `-f`: Output format (`table` [default], `json`, `sarif`).
-- `--output`, `-o`: File path to save the report to. If omitted, outputs to console.
-
-#### Exit Codes:
-- `0`: All dependencies pass security policy (clean or warnings only).
-- `1`: Policy violations detected (Critical or High findings) or input error.
-
----
-
-## Policy Configuration
-
-You can provide a custom `policy.yaml` or `policy.json` to configure rules and thresholds:
-
-```yaml
-version: "1.0"
-rules:
-  unpinned_versions:
-    enabled: true
-    severity: high
-
-  licenses:
-    enabled: true
-    allowed:
-      - MIT
-      - Apache-2.0
-      - BSD-2-Clause
-      - BSD-3-Clause
-      - ISC
-      - CC0-1.0
-      - Unlicense
-      - 0BSD
-    denied:
-      - GPL-2.0
-      - GPL-3.0
-      - AGPL-3.0
-      - SSPL-1.0
-    allow_unknown: false
-    unknown_severity: medium
-    denied_severity: critical
-
-  typosquatting:
-    enabled: true
-    severity: high
-    threshold: 1 # Maximum edit distance for short package names
-    custom_targets:
-      - internal-core-utils
-      - proprietary-sdk
-```
-
----
-
-## Architecture Overview
-
-```
-src/lh_sbom_auditor/
-├── __init__.py           # Package version and author metadata
-├── cli.py                # Typer CLI application (generate and audit commands)
-├── models.py             # Data models (Package, DependencyGraph, Finding, AuditReport)
-├── parsers/              # Multi-ecosystem lockfile parsers
-│   ├── base.py           # AbstractLockfileParser and auto-detection engine
-│   ├── uv_lock.py        # Python uv.lock TOML parser
-│   ├── requirements.py   # Python requirements.txt parser
-│   └── package_lock.py   # Node.js package-lock.json (v1, v2, v3) parser
-├── sbom/                 # SBOM generators
-│   └── cyclonedx.py      # CycloneDX v1.5 JSON generator
-├── auditor/              # Risk evaluation rules and policy engine
-│   ├── engine.py         # Audit orchestrator
-│   ├── policy.py         # Policy parser (zero-dependency YAML/JSON)
-│   └── rules.py          # Unpinned, license compliance, and typosquatting rules
-└── exporters/            # Reporting formats
-    ├── table.py          # Rich terminal table renderer
-    ├── json_exporter.py  # Structured JSON exporter
-    └── sarif.py          # OASIS SARIF v2.1.0 exporter
-```
-
----
+- **[Architecture & Design](docs/ARCHITECTURE.md)**: Zero-daemon clean-room architecture, module responsibilities, domain models, and 0–100 risk score calculation formula.
+- **[Security Rules Reference](docs/RULES.md)**: Exhaustive catalog of all 10 detection rules with threat models, severities, and remediation guides.
+- **[CLI Usage Guide](docs/USAGE.md)**: Complete command-line manual, flags, exit codes, CI/CD SARIF upload workflows, and JSON pipelines.
+- **[Test & Verification Declaration](docs/TESTING.md)**: Audited test inventory, AST security verification, SAST audit results, and per-module code coverage metrics.
+- **[Changelog](CHANGELOG.md)**: Semantic release history and detailed changelog entries.
+- **[Contributing Guidelines](CONTRIBUTING.md)**: Developer setup, coding standards, line length, typing, and PR requirements.
+- **[Security Policy](SECURITY.md)**: Vulnerability disclosure procedure, reporting email, and 48-hour response SLA.
+- **[Legal Notice & Attributions](NOTICE)**: Apache-2.0 Section 4 legal notice, trademark reservations, and third-party software attributions.
 
 ## Development & Testing
 
-Run all quality checks and tests locally:
+Run all project linters, security audits, and test suites:
 
 ```bash
-# Linting with Ruff
-ruff check src tests
+# Run code style and lint checks
+uv run ruff check src/ tests/
 
-# Formatting check
-ruff format --check src tests
+# Run static application security testing (SAST)
+uv run bandit -r src/
 
-# AST Security scanning with Bandit
-bandit -r src
-
-# Run test suite with pytest & coverage
-pytest tests/ --cov=src/lh_sbom_auditor --cov-report=term
+# Run unit and integration tests with coverage
+uv run pytest
 ```
 
 ---
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the Apache-2.0 License - see the [LICENSE](LICENSE) and [NOTICE](NOTICE) files for details.
 
-Copyright (c) 2026 Logihertz Systems OPC Pvt Ltd.
+Developed with precision by **Logihertz Systems (OPC) Private Limited** (`logihertzsystems`).  
+Created, architected, and engineered by **Sameer Tawade** (Creator, Founder, Director & Whole and Sole Developer — `ops@logihertz.com`).

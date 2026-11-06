@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-sbom-auditor (lh-sbom)
+# Module:        tests.test_sbom
+# Role:          Test Suite & Rule Verification
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Unit tests for CycloneDX 1.5 JSON SBOM generation."""
 
 from __future__ import annotations
@@ -78,4 +88,3 @@ def test_cyclonedx_json_output(sample_package_lock_v3_path: Path) -> None:
     # Check scoped npm purl
     types_node_comp = next(c for c in parsed["components"] if c["name"] == "@types/node")
     assert types_node_comp["purl"] == "pkg:npm/%40types/node@18.15.0"
-

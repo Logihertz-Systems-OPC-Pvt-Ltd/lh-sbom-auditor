@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-sbom-auditor (lh-sbom)
+# Module:        src.lh_sbom_auditor.parsers.base
+# Role:          Core Security Engine Component
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Base interfaces and discovery logic for package lockfile parsers."""
 
 from __future__ import annotations
@@ -78,4 +88,3 @@ def detect_and_parse(target_path: Path | str) -> DependencyGraph:
         )
 
     raise ValueError(f"Path is neither a regular file nor a directory: {path}")
-

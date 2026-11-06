@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-sbom-auditor (lh-sbom)
+# Module:        src.lh_sbom_auditor.exporters.sarif
+# Role:          Core Security Engine Component
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """OASIS SARIF v2.1.0 exporter for static analysis integration."""
 
 from __future__ import annotations
@@ -129,7 +139,7 @@ def export_audit_sarif(report: AuditReport, indent: int = 2) -> str:
                         "name": "lh-sbom-auditor",
                         "organization": "Logihertz Systems OPC Pvt Ltd",
                         "semanticVersion": __version__,
-                        "informationUri": "https://github.com/logihertz/lh-sbom-auditor",
+                        "informationUri": "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-sbom-auditor",
                         "rules": _RULES_CATALOGUE,
                     }
                 },
@@ -188,7 +198,7 @@ def export_graph_sarif(graph: DependencyGraph, indent: int = 2) -> str:
                         "name": "lh-sbom-auditor",
                         "organization": "Logihertz Systems OPC Pvt Ltd",
                         "semanticVersion": __version__,
-                        "informationUri": "https://github.com/logihertz/lh-sbom-auditor",
+                        "informationUri": "https://github.com/Logihertz-Systems-OPC-Pvt-Ltd/lh-sbom-auditor",
                         "rules": _RULES_CATALOGUE,
                     }
                 },

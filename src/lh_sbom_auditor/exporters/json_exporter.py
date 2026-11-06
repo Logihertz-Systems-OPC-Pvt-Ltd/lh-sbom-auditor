@@ -1,3 +1,13 @@
+# ==============================================================================
+# Product:       lh-sbom-auditor (lh-sbom)
+# Module:        src.lh_sbom_auditor.exporters.json_exporter
+# Role:          SARIF, JSON & Rich Terminal Table Exporters
+# Organization:  Logihertz Systems (OPC) Private Limited (logihertzsystems)
+# Creator:       Sameer Tawade (Creator, Founder, Director & Whole and Sole Developer)
+# Contact:       ops@logihertz.com | https://logihertz.com/
+# License:       Apache License 2.0 (SPDX-License-Identifier: Apache-2.0)
+# ==============================================================================
+
 """Structured JSON exporter for graphs and audit reports."""
 
 from __future__ import annotations
@@ -35,4 +45,3 @@ def export_graph_json(graph: DependencyGraph, indent: int = 2) -> str:
         **graph.to_dict(),
     }
     return json.dumps(data, indent=indent, default=str)
-
